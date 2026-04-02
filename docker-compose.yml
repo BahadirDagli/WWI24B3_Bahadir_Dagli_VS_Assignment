@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  mqtt:
+    image: emqx/emqx:latest
+    ports:
+      - "1883:1883"
+
+  ms1:
+    build: ./MS1
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mqtt
+
+  ms2:
+    build: ./MS2
+    depends_on:
+      - mqtt
