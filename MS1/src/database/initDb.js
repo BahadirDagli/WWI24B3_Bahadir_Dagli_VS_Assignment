@@ -29,5 +29,38 @@ db.serialize(() => {
         )
     `);
 
+        db.get('SELECT COUNT(*) AS count FROM spieler', (err, row) => {
+        if (err) {
+            console.error('Fehler beim Prüfen der Demo-Daten:', err.message);
+            return;
+        }
+
+        if (row.count === 0) {
+            db.run(`
+                INSERT INTO spieler (username, email) VALUES
+                ('MaxGamer', 'max@example.com'),
+                ('LenaZockt', 'lena@example.com'),
+                ('NoahPlays', 'noah@example.com')
+            `);
+
+            db.run(`
+                INSERT INTO level (name, schwierigkeit, laenge) VALUES
+                ('Bloodbath', 'extremedemon', 120),
+                ('Shiver', 'easydemon', 300),
+                ('Greif', 'insane', 500)
+            `);
+
+            db.run(`
+                INSERT INTO spielrunde (spielerId, levelId, erreichteProzente) VALUES
+                (1, 1, 85),
+                (2, 2, 60),
+                (3, 3, 40)
+            `);
+
+            console.log('Demo-Daten eingefügt');
+        }
+    });
+    
+
     console.log('Tabellen wurden geprüft/erstellt');
 });
