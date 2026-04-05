@@ -59,8 +59,56 @@ function createSpieler(username, email) {
     });
 }
 
+function updateSpieler(id, updates) {
+    return new Promise((resolve, reject) => {
+        const fields = [];
+        const values = [];
+
+        if (updates.username !== undefined) {
+            fields.push('username = ?');
+            values.push(updates.username);
+        }
+
+        if (updates.email !== undefined) {
+            fields.push('email = ?');
+            values.push(updates.email);
+        }
+
+        if (fields.length === 0) {
+            resolve(null);
+            return;
+        }
+
+        values.push(id);
+
+        const sql = `UPDATE spieler SET ${fields.join(', ')} WHERE spielerId = ?`;
+
+        db.run(sql, values, function (err) {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            if (this.changes === 0) {
+                resolve(undefined);
+                return;
+            }
+
+            db.get('SELECT * FROM spieler WHERE spielerId = ?', [id], (selectErr, row) => {
+                if (selectErr) {
+                    reject(selectErr);
+                    return;
+                }
+
+                resolve(row);
+            });
+        });
+    });
+}
+
 module.exports = {
     getAllSpieler,
     getSpielerById,
-    createSpieler
+    createSpieler,
+    updateSpieler
 };

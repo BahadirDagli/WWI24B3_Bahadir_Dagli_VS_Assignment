@@ -49,8 +49,45 @@ async function createSpieler(req, res) {
     }
 }
 
+async function updateSpieler(req, res) {
+    try {
+        const id = req.params.id;
+        const { username, email } = req.body;
+
+        const updates = {};
+
+        if (username !== undefined) {
+            updates.username = username;
+        }
+
+        if (email !== undefined) {
+            updates.email = email;
+        }
+
+        const aktualisierterSpieler = await spielerRepository.updateSpieler(id, updates);
+
+        if (aktualisierterSpieler === undefined) {
+            res.set('X-Fehlermeldung', 'Spieler nicht gefunden');
+            res.status(404).json({ error: 'Spieler nicht gefunden' });
+            return;
+        }
+
+        if (aktualisierterSpieler === null) {
+            res.set('X-Fehlermeldung', 'Keine gültigen Felder zum Aktualisieren');
+            res.status(400).json({ error: 'Keine gültigen Felder zum Aktualisieren' });
+            return;
+        }
+
+        res.json(aktualisierterSpieler);
+    } catch (error) {
+        res.set('X-Fehlermeldung', 'Fehler beim Aktualisieren des Spielers');
+        res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+}
+
 module.exports = {
     getAllSpieler,
     getSpielerById,
-    createSpieler
+    createSpieler,
+    updateSpieler
 };
