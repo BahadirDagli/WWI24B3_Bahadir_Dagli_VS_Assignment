@@ -106,9 +106,30 @@ function updateSpieler(id, updates) {
     });
 }
 
+function deleteSpieler(id) {
+    return new Promise((resolve, reject) => {
+        const sql = 'DELETE FROM spieler WHERE spielerId = ?';
+
+        db.run(sql, [id], function (err) {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            if (this.changes === 0) {
+                resolve(false);
+                return;
+            }
+
+            resolve(true);
+        });
+    });
+}
+
 module.exports = {
     getAllSpieler,
     getSpielerById,
     createSpieler,
-    updateSpieler
-};
+    updateSpieler,
+    deleteSpieler
+}

@@ -91,9 +91,28 @@ async function updateSpieler(req, res) {
     }
 }
 
+async function deleteSpieler(req, res) {
+    try {
+        const id = req.params.id;
+        const deleted = await spielerRepository.deleteSpieler(id);
+
+        if (!deleted) {
+            res.set('X-Fehlermeldung', 'Spieler nicht gefunden');
+            res.status(404).json({ error: 'Spieler nicht gefunden' });
+            return;
+        }
+
+        res.status(204).send();
+    } catch (error) {
+        res.set('X-Fehlermeldung', 'Fehler beim Löschen des Spielers');
+        res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+}
+
 module.exports = {
     getAllSpieler,
     getSpielerById,
     createSpieler,
-    updateSpieler
+    updateSpieler,
+    deleteSpieler
 };
