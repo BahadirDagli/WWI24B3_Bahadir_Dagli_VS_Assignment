@@ -1,8 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-require('./database/initDb');
-const spielerRoutes = require('./routes/spielerRoutes');
 
+require('./database/initDb');
+//require('./config/mqtt');
+
+const spielerRoutes = require('./routes/spielerRoutes');
+const levelRoutes = require('./routes/levelRoutes');
 
 const app = express();
 
@@ -14,5 +17,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/spieler', spielerRoutes);
+app.use('/level', levelRoutes);
 
 module.exports = app;
