@@ -56,6 +56,12 @@ async function updateSpieler(req, res) {
 
         const updates = {};
 
+        if (req.body.spielerId !== undefined) {
+         res.set('X-Fehlermeldung', 'spielerId darf nicht geändert werden');
+        res.status(400).json({ error: 'spielerId darf nicht geändert werden' });
+        return;
+        }
+
         if (username !== undefined) {
             updates.username = username;
         }
