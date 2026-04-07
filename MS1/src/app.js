@@ -6,6 +6,7 @@ require('./database/initDb');
 
 const spielerRoutes = require('./routes/spielerRoutes');
 const levelRoutes = require('./routes/levelRoutes');
+const spielrundeRoutes = require('./routes/spielrundeRoutes');
 
 const app = express();
 
@@ -18,5 +19,7 @@ app.get('/', (req, res) => {
 
 app.use('/spieler', spielerRoutes);
 app.use('/level', levelRoutes);
+app.use('/spielrunde', spielrundeRoutes);
+
 
 module.exports = app;
