@@ -41,6 +41,7 @@ async function createSpieler(req, res) {
         }
 
         const neuerSpieler = await spielerRepository.createSpieler(username, email);
+        publishEvent('spieler', neuerSpieler.spielerId, 'created');
 
         res.status(201).json(neuerSpieler);
     } catch (error) {
@@ -83,8 +84,9 @@ async function updateSpieler(req, res) {
             res.status(400).json({ error: 'Keine gültigen Felder zum Aktualisieren' });
             return;
         }
-
+        publishEvent('spieler', aktualisierterSpieler.spielerId, 'updated');
         res.json(aktualisierterSpieler);
+
     } catch (error) {
         res.set('X-Fehlermeldung', 'Fehler beim Aktualisieren des Spielers');
         res.status(500).json({ error: 'Interner Serverfehler' });
@@ -102,12 +104,15 @@ async function deleteSpieler(req, res) {
             return;
         }
 
+        publishEvent('spieler', Number(id), 'deleted');
         res.status(204).send();
+        
     } catch (error) {
         res.set('X-Fehlermeldung', 'Fehler beim Löschen des Spielers');
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 }
+const { publishEvent } = require('../services/mqttPublisher');
 
 module.exports = {
     getAllSpieler,

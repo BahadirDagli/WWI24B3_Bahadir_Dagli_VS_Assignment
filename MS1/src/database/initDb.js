@@ -50,12 +50,13 @@ db.serialize(() => {
                 ('Greif', 'insane', 500)
             `);
 
-            db.run(`
-                INSERT INTO spielrunde (spielerId, levelId, erreichteProzente) VALUES
-                (1, 1, 85),
-                (2, 2, 60),
-                (3, 3, 40)
-            `);
+           // Demo-Daten für spielrunde vorerst deaktiviert
+        // db.run(`
+        //     INSERT INTO spielrunde (spielerId, levelId, erreichteProzente) VALUES
+        //     (1, 1, 85),
+        //     (2, 2, 60),
+        //     (3, 3, 40)
+        // `);
 
             console.log('Demo-Daten eingefügt');
         }
