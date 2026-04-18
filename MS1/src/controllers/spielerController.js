@@ -1,4 +1,5 @@
 const spielerRepository = require('../database/spielerRepository');
+const { publishEvent } = require('../services/mqttPublisher');
 
 async function getAllSpieler(req, res) {
     try {
@@ -33,7 +34,7 @@ async function createSpieler(req, res) {
     try {
         const { username, email } = req.body;
 
-        // Pflichtfelder prüfen
+        
         if (!username || !email) {
             res.set('X-Fehlermeldung', 'username und email sind Pflichtfelder');
             res.status(400).json({ error: 'Fehlende Pflichtfelder' });
@@ -112,7 +113,6 @@ async function deleteSpieler(req, res) {
         res.status(500).json({ error: 'Interner Serverfehler' });
     }
 }
-const { publishEvent } = require('../services/mqttPublisher');
 
 module.exports = {
     getAllSpieler,

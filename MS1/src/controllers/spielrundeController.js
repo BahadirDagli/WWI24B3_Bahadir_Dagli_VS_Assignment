@@ -1,4 +1,5 @@
 const spielrundeRepository = require('../database/spielrundeRepository');
+const { publishEvent } = require('../services/mqttPublisher');
 
 async function getAllSpielrunden(req, res) {
     try {
@@ -44,7 +45,10 @@ async function createSpielrunde(req, res) {
             erreichteProzente
         );
 
+        publishEvent('spielrunde', neueSpielrunde.rundenId, 'created');
+
         res.status(201).json(neueSpielrunde);
+
     } catch (error) {
         res.set('X-Fehlermeldung', 'Fehler beim Erstellen der Spielrunde');
         res.status(500).json({ error: 'Interner Serverfehler' });
@@ -89,8 +93,9 @@ async function updateSpielrunde(req, res) {
             res.status(400).json({ error: 'Keine gültigen Felder zum Aktualisieren' });
             return;
         }
-
+        publishEvent('spielrunde', aktualisierteSpielrunde.rundenId, 'updated');
         res.json(aktualisierteSpielrunde);
+
     } catch (error) {
         res.set('X-Fehlermeldung', 'Fehler beim Aktualisieren der Spielrunde');
         res.status(500).json({ error: 'Interner Serverfehler' });
@@ -107,8 +112,10 @@ async function deleteSpielrunde(req, res) {
             res.status(404).json({ error: 'Spielrunde nicht gefunden' });
             return;
         }
+        publishEvent('spielrunde', Number(id), 'deleted');
 
         res.status(204).send();
+        
     } catch (error) {
         res.set('X-Fehlermeldung', 'Fehler beim Löschen der Spielrunde');
         res.status(500).json({ error: 'Interner Serverfehler' });
