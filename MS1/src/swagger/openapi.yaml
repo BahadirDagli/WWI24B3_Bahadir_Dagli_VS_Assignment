@@ -1,0 +1,278 @@
+openapi: 3.0.0
+info:
+  title: Verteilte Systeme API
+  version: 1.0.0
+  description: REST-API für Spieler, Level und Spielrunden
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /spieler:
+    get:
+      summary: Alle Spieler abrufen
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema:
+            type: string
+          description: Suchbegriff für username oder email
+      responses:
+        '200':
+          description: Liste der Spieler
+    post:
+      summary: Neuen Spieler anlegen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - email
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '201':
+          description: Spieler erfolgreich erstellt
+        '400':
+          description: Ungültige Eingabe
+
+  /spieler/{id}:
+    get:
+      summary: Spieler per ID abrufen
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Spieler gefunden
+        '404':
+          description: Spieler nicht gefunden
+    patch:
+      summary: Spieler teilweise aktualisieren
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Spieler aktualisiert
+        '400':
+          description: Ungültige Eingabe
+        '404':
+          description: Spieler nicht gefunden
+    delete:
+      summary: Spieler löschen
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Spieler gelöscht
+        '404':
+          description: Spieler nicht gefunden
+
+  /level:
+    get:
+      summary: Alle Level abrufen
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Liste der Level
+    post:
+      summary: Neues Level anlegen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - schwierigkeit
+                - laenge
+              properties:
+                name:
+                  type: string
+                schwierigkeit:
+                  type: string
+                laenge:
+                  type: integer
+      responses:
+        '201':
+          description: Level erstellt
+        '400':
+          description: Ungültige Eingabe
+
+  /level/{id}:
+    get:
+      summary: Level per ID abrufen
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Level gefunden
+        '404':
+          description: Level nicht gefunden
+    patch:
+      summary: Level teilweise aktualisieren
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                schwierigkeit:
+                  type: string
+                laenge:
+                  type: integer
+      responses:
+        '200':
+          description: Level aktualisiert
+        '400':
+          description: Ungültige Eingabe
+        '404':
+          description: Level nicht gefunden
+    delete:
+      summary: Level löschen
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Level gelöscht
+        '404':
+          description: Level nicht gefunden
+
+  /spielrunde:
+    get:
+      summary: Alle Spielrunden abrufen
+      responses:
+        '200':
+          description: Liste der Spielrunden
+    post:
+      summary: Neue Spielrunde anlegen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - spielerId
+                - levelId
+                - erreichteProzente
+              properties:
+                spielerId:
+                  type: integer
+                levelId:
+                  type: integer
+                erreichteProzente:
+                  type: integer
+      responses:
+        '201':
+          description: Spielrunde erstellt
+        '400':
+          description: Ungültige Eingabe
+
+  /spielrunde/{id}:
+    get:
+      summary: Spielrunde per ID abrufen
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Spielrunde gefunden
+        '404':
+          description: Spielrunde nicht gefunden
+    patch:
+      summary: Spielrunde teilweise aktualisieren
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                spielerId:
+                  type: integer
+                levelId:
+                  type: integer
+                erreichteProzente:
+                  type: integer
+      responses:
+        '200':
+          description: Spielrunde aktualisiert
+        '400':
+          description: Ungültige Eingabe
+        '404':
+          description: Spielrunde nicht gefunden
+    delete:
+      summary: Spielrunde löschen
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Spielrunde gelöscht
+        '404':
+          description: Spielrunde nicht gefunden
